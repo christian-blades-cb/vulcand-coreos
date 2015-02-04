@@ -1,0 +1,17 @@
+[Unit]
+Description=vulcand reverse proxy
+Requires=docker.service
+After=docker.service
+
+[Service]
+ExecStartPre=-/usr/bin/env docker kill vulcand
+ExecStartPre=-/usr/bin/env docker rm vulcand
+ExecStartPre=/usr/bin/env docker pull christianbladescb/vulcand-coreos
+ExecStart=/usr/bin/env docker run --name vulcand -p 8181:8181 christianbladescb/vulcand-coreos
+ExecStop=/usr/bin/env docker stop vulcand
+
+[Install]
+WantedBy=multi-user.target
+
+[X-Fleet]
+Global=true
